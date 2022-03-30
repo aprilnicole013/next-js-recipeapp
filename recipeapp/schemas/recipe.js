@@ -94,5 +94,11 @@ export default {
                 },
             ]
         },
+        {
+            name: "instructions",
+            title: "Instructions",
+            type: "array",
+            of: [{ type: "block" }],
+        }
     ],
 }
