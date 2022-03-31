@@ -12,6 +12,7 @@ const recipeQuery = `*[_type== "recipe" && slug.current == $slug[0]]{
     slug,
     mainImage,
     ingredient[]{
+        _key,
         unit,
         wholeNumber,
         fraction,
@@ -22,7 +23,35 @@ const recipeQuery = `*[_type== "recipe" && slug.current == $slug[0]]{
     instructions
 }`
 
-export default function OneRecipe(){
+export default function OneRecipe({data}){
+    const recipe = data
+
+    return (
+        <article className="recipe">
+            <h1>
+                {recpipe.name}
+            </h1>
+            <main className="content">
+                <img src={urlFor(recipe?.mainImage).url()} alt={recipe.name}/>
+                <div className="breakdown">
+                    <ul className="ingredients">
+                        {recipe.ingredient?.map((ingredient) => (
+                            <li key={ingredient._key} className="ingredient">
+                                {ingredient?.wholeNumber}
+                                {ingredient?.fraction}
+                                {" "}
+                                {ingredient?.unit}
+                                <br/>
+                                {ingredient?.ingredient.name}
+                            </li>
+                        ))}
+                        
+                    </ul>
+                    <PortableText block={recipe?.instructions} className="instructions"/>
+                </div>
+            </main>
+        </article>
+    )
 
 }
 
