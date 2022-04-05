@@ -1,5 +1,6 @@
 //dynamic route: recipes/(insert recipe here) you can use this data for queries. dont need a route for each recipe.
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import {
     sanityClient,
     urlFor,
@@ -26,12 +27,18 @@ const recipeQuery = `*[_type== "recipe" && slug.current == $slug[0]]{
 }`
 
 export default function OneRecipe({data, preview}){
+const router = useRouter()
+
+if(router.isFallback){
+    return <div>Loading...</div>
+}
+
     const { data: recipe } = usePreviewSubscription(recipeQuery, {
         params: { slug: data.recipe?.slug.current},
         initialData: data,
         enabled: preview,
     })
-    
+
     const [ likes, setLikes ] = useState(data?.recipe?.likes)
     
     const addLikes = async () => {
